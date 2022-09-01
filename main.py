@@ -4,6 +4,7 @@ import time
 import math
 import numpy as np
 import time
+
 ref_img = None  # 참고이미지
 
 
@@ -105,9 +106,8 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
     return success
 
 
-
 def main():
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     cap.set(3, 480)
     cap.set(4, 640)
     pTime = 0
@@ -180,16 +180,14 @@ def main():
             #         cv2.putText(img, str(int(sec)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
 
             now_time = time.time()
-            #if seccess == 12:
-            if seccess > 4:
+            # if seccess == 12:
+            if seccess > 10:
                 interval = now_time - start_time
-                cv2.putText(img, str(int(interval)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 1)
-                if interval > 10.0: # 10초가 지났다
+                cv2.putText(img, str(int(interval)), (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 5, (0, 55, 25), 1)
+                if interval > 10.0:  # 10초가 지났다
                     print("10초동안 자세를 유지하셨습니다.")
             else:
-                start_time = time.time() #성공하지 못하였으므로 시간을 지금시간으로 설정
-
-            
+                start_time = time.time()  # 성공하지 못하였으므로 시간을 지금시간으로 설정
 
             # print(lmlist[11])
             # print(lmlist[12])
@@ -201,7 +199,6 @@ def main():
             # cv2.circle(img, (lmlist[13][1], lmlist[13][2]), 10, (0, 0, 255), 2)
 
             # cv2.putText(img, str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 1)
-
 
         # FPS계산 및 화면 표시
         # cTime = time.time()
