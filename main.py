@@ -3,6 +3,7 @@ import mediapipe as mp
 import time
 import math
 import numpy as np
+
 class poseDetector():
     def __init__(self, mode= False, complexity= 1, landmarks= True, enable_seg= False,
                  smooth_seg= True, det_conf= 0.5, track_conf= 0.5):
@@ -45,7 +46,7 @@ class poseDetector():
 
 def main():
     cap = cv2.VideoCapture(0)
-    cap.set(3,1280)
+    cap.set(3,480)
     cap.set(4,640)
     pTime = 0
     detector = poseDetector()
@@ -63,6 +64,7 @@ def main():
 
         cv2.imshow("Pose Estimation", np.hstack((img, image)))
         cv2.waitKey(1)
+
 def calculateAngle(landmark1, landmark2, landmark3):
     x1, y1, _ = landmark1
     x2, y2, _ = landmark2
@@ -73,8 +75,6 @@ def calculateAngle(landmark1, landmark2, landmark3):
         angle += 360
 
     return angle
-
-
 
 if __name__ == "__main__":
     main()

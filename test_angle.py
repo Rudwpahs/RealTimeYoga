@@ -4,22 +4,31 @@ import time
 import math
 import numpy as np
 
-def Trackbar(img):
-    def onChange(x):
-        pass
+ref_img = None # 참고이미지
 
-    img = cv2.imread("TREE-M.png")
+def Trackbar():
+    global ref_img
+
+    def onChange(x):
+        global ref_img
+        #print('position changed')
+        if x == 1:
+          ref_img = cv2.imread("TREE-W.png")
+        else:
+          ref_img = cv2.imread("TREE-M.png")
+
+    #img = cv2.imread("TREE-M.png")
 
     cv2.namedWindow("Pose Estimation")
     cv2.createTrackbar('Man or Woman', "Pose Estimation", 0, 1, onChange)
-    while True:
+    #while True:
 
-        WM = cv2.getTrackbarPos('Man or Woman', "Pose Estimation")
-        if WM == 1:
-            img = cv2.imread("TREE-W.png")
-        else:
-            img = cv2.imread("TREE-M.png")
-        cv2.imshow("Pose Estimation", img)
+    WM = cv2.getTrackbarPos('Man or Woman', "Pose Estimation")
+    if WM == 1:
+        ref_img = cv2.imread("TREE-W.png")
+    else:
+        ref_img = cv2.imread("TREE-M.png")
+    cv2.imshow("Pose Estimation", ref_img)
 
 
 class poseDetector():
@@ -69,8 +78,9 @@ def main():
     cap.set(4, 640)
     pTime = 0
     detector = poseDetector()
-    image = cv2.imread("TREE-M.png")
-    Trackbar(image)
+    #image = cv2.imread("TREE-M.png")
+    #Trackbar(image)
+    Trackbar()
     while True:
         success, img = cap.read()
         img = detector.findPose(img)
@@ -94,7 +104,7 @@ def main():
         cv2.putText(img, str(int(fps)), (70, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
 
         # cv2.imshow("Pose Estimation", img)
-        cv2.imshow("Pose Estimation", np.hstack((img, image)))
+        cv2.imshow("Pose Estimation", np.hstack((img, ref_img)))
         cv2.waitKey(1)
 
 
