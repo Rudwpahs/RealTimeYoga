@@ -106,7 +106,7 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
 
 
 def main():
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     cap.set(3, 480)
     cap.set(4, 640)
     pTime = 0
@@ -133,7 +133,7 @@ def main():
             # 23-11-13: 315
             # 13-15-19: 240
             # 12-14-16: 45
-            seccess = 0
+            seccess = 12
             y = 0
             dy = 30
             y += dy
@@ -169,9 +169,9 @@ def main():
                 while (sec != 0):
                     sec = sec - 1
                     time.sleep(1)
-                    print(sec)
-            # if seccess == 12:
-            #     ten()
+                    cv2.putText(img, str(int(sec)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
+            if seccess >= 12:
+                ten()
 
 
             # print(lmlist[11])
@@ -187,10 +187,10 @@ def main():
 
 
         # FPS계산 및 화면 표시
-        cTime = time.time()
-        fps = 1 / (cTime - pTime)
-        pTime = cTime
-        cv2.putText(img, str(int(fps)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
+        # cTime = time.time()
+        # fps = 1 / (cTime - pTime)
+        # pTime = cTime
+        # cv2.putText(img, str(int(fps)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
 
         cv2.imshow("Pose Estimation", np.hstack((img, ref_img)))
 
