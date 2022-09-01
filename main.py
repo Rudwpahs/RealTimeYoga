@@ -3,7 +3,7 @@ import mediapipe as mp
 import time
 import math
 import numpy as np
-
+import time
 ref_img = None  # 참고이미지
 
 
@@ -99,9 +99,9 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
     # cv2.circle(img, (lm1[1], lm1[2]), 10, (0, 0, 255), 2)
     cv2.circle(img, (lm2[1], lm2[2]), 10, color, 2)
     # cv2.circle(img, (lm3[1], lm3[2]), 10, (0, 0, 255), 2)
-    cv2.putText(img, str(int(angle)), (20, yy), cv2.FONT_HERSHEY_PLAIN, 2, color, 1)
-    cv2.putText(img, str(int(ref_angle)), (100, yy), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 1)
-    cv2.putText(img, str(int(diff)), (180, yy), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 1)
+    # cv2.putText(img, str(int(angle)), (20, yy), cv2.FONT_HERSHEY_PLAIN, 2, color, 1)
+    # cv2.putText(img, str(int(ref_angle)), (100, yy), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 1)
+    # cv2.putText(img, str(int(diff)), (180, yy), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 1)
     return success
 
 
@@ -111,7 +111,7 @@ def main():
     cap.set(4, 640)
     pTime = 0
     detector = poseDetector()
-    # image = cv2.imread("TREE-M.png")
+    image = cv2.imread("TREE-M.png")
     # Trackbar(image)
     Trackbar()
     while True:
@@ -160,6 +160,19 @@ def main():
             if process_angle(img, y, lmlist[13], lmlist[15], lmlist[19], 240): seccess += 1
             y += dy
             if process_angle(img, y, lmlist[12], lmlist[14], lmlist[16], 45): seccess += 1
+            def ten():
+                in_sec = 10
+                sec = int(in_sec)
+                print(sec)
+
+                # while은 반복문으로 sec가 0이 되면 반복을 멈춰라
+                while (sec != 0):
+                    sec = sec - 1
+                    time.sleep(1)
+                    print(sec)
+            # if seccess == 12:
+            #     ten()
+
 
             # print(lmlist[11])
             # print(lmlist[12])
@@ -171,7 +184,7 @@ def main():
             # cv2.circle(img, (lmlist[13][1], lmlist[13][2]), 10, (0, 0, 255), 2)
 
             # cv2.putText(img, str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 1)
-            
+
 
         # FPS계산 및 화면 표시
         cTime = time.time()
