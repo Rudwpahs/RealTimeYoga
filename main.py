@@ -133,7 +133,7 @@ def main():
             # 23-11-13: 315
             # 13-15-19: 240
             # 12-14-16: 45
-            seccess = 12
+            seccess = 0
             y = 0
             dy = 30
             y += dy
@@ -170,7 +170,7 @@ def main():
                     sec = sec - 1
                     time.sleep(1)
                     cv2.putText(img, str(int(sec)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
-            if seccess >= 12:
+            if seccess == 12:
                 ten()
 
 
