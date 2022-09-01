@@ -71,43 +71,6 @@ class poseDetector():
                     cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
         return lmlist
 
-
-def main():
-    cap = cv2.VideoCapture(0)
-    cap.set(3, 480)
-    cap.set(4, 640)
-    pTime = 0
-    detector = poseDetector()
-    #image = cv2.imread("TREE-M.png")
-    #Trackbar(image)
-    Trackbar()
-    while True:
-        success, img = cap.read()
-        img = detector.findPose(img)
-        lmlist = detector.findPosition(img)
-        # print(lmlist)
-        if len(lmlist) > 0:
-            print(lmlist[11])
-            print(lmlist[12])
-            print(lmlist[13])
-            angle = calculateAngle(lmlist[12], lmlist[11], lmlist[13])
-            # print(angle)
-            cv2.circle(img, (lmlist[11][1], lmlist[11][2]), 10, (0, 0, 255), 2)
-            cv2.circle(img, (lmlist[12][1], lmlist[12][2]), 10, (0, 0, 255), 2)
-            cv2.circle(img, (lmlist[13][1], lmlist[13][2]), 10, (0, 0, 255), 2)
-
-            cv2.putText(img, str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 1)
-
-        cTime = time.time()
-        fps = 1 / (cTime - pTime)
-        pTime = cTime
-        cv2.putText(img, str(int(fps)), (70, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
-
-        # cv2.imshow("Pose Estimation", img)
-        cv2.imshow("Pose Estimation", np.hstack((img, ref_img)))
-        cv2.waitKey(1)
-
-
 def calculateAngle(landmark1, landmark2, landmark3):
     _, x1, y1 = landmark1
     _, x2, y2 = landmark2
@@ -119,6 +82,114 @@ def calculateAngle(landmark1, landmark2, landmark3):
         angle += 360
 
     return angle
+
+def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
+    angle = calculateAngle(lm1, lm2, lm3)
+    # 각도차이를 구한다.
+    diff = angle - ref_angle
+    if diff < 0: diff += 360
+    if diff > 180: diff = 360 - diff
+    success = diff < 20
+
+    # 각도가 20도 이하이면 성공 파란색, 틀리면 붉은색
+    color = (255, 0, 0) if success else (0, 0, 255)
+    #cv2.circle(img, (lm1[1], lm1[2]), 10, (0, 0, 255), 2)
+    cv2.circle(img, (lm2[1], lm2[2]), 10, color, 2)
+    #cv2.circle(img, (lm3[1], lm3[2]), 10, (0, 0, 255), 2)
+    cv2.putText(img, str(int(angle)), (20, yy), cv2.FONT_HERSHEY_PLAIN, 2, color, 1)
+    cv2.putText(img, str(int(ref_angle)), (100, yy), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 1)
+    cv2.putText(img, str(int(diff)), (180, yy), cv2.FONT_HERSHEY_PLAIN, 2, (255, 0, 0), 1)
+    return success
+
+def main():
+    cap = cv2.VideoCapture(0)
+    cap.set(3, 480)
+    cap.set(4, 640)
+    pTime = 0
+    detector = poseDetector()
+    #image = cv2.imread("TREE-M.png")
+    #Trackbar(image)
+    Trackbar()
+    while True:
+        _, img = cap.read()
+        img = detector.findPose(img)
+        lmlist = detector.findPosition(img)
+        # print(lmlist)
+        if len(lmlist) > 0:
+
+            # 24-26-28: 180
+            # 23-25-27: 90
+            # 11-23-27: 180
+            # 12-24-28: 180
+            # 11-13-15: 90
+            # 12-14-16: 90
+
+            # 16-20-15: 30
+            # 16-19-15: 30
+            # 24-12-14: 90
+            # 23-11-13: 90
+            # 13-15-19: 120
+            # 12-14-16: 120
+            seccess = 0
+            y = 0
+            dy = 30
+            y += dy
+            if process_angle(img, y, lmlist[24], lmlist[26], lmlist[28], 180): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[23], lmlist[25], lmlist[27], 90): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[11], lmlist[23], lmlist[27], 180): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[12], lmlist[24], lmlist[28], 180): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[11], lmlist[13], lmlist[15], 180): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[12], lmlist[14], lmlist[16], 180): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[16], lmlist[20], lmlist[15], 30): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[16], lmlist[19], lmlist[15], 30): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[24], lmlist[12], lmlist[14], 90): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[23], lmlist[11], lmlist[13], 90): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[13], lmlist[15], lmlist[19], 120): seccess += 1
+            y += dy
+            if process_angle(img, y, lmlist[12], lmlist[14], lmlist[16], 120): seccess += 1
+
+
+
+            #print(lmlist[11])
+            #print(lmlist[12])
+            # #print(lmlist[13])
+            # angle = calculateAngle(lmlist[12], lmlist[11], lmlist[13])
+            # # print(angle)
+            # cv2.circle(img, (lmlist[11][1], lmlist[11][2]), 10, (0, 0, 255), 2)
+            # cv2.circle(img, (lmlist[12][1], lmlist[12][2]), 10, (0, 0, 255), 2)
+            # cv2.circle(img, (lmlist[13][1], lmlist[13][2]), 10, (0, 0, 255), 2)
+
+            # cv2.putText(img, str(int(angle)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 1)
+
+        # FPS계산 및 화면 표시
+        cTime = time.time()
+        fps = 1 / (cTime - pTime)
+        pTime = cTime
+        cv2.putText(img, str(int(fps)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
+
+        cv2.imshow("Pose Estimation", np.hstack((img, ref_img)))
+        
+        key = cv2.waitKey(1)
+        if key == 27: # ESC를 누르면 무한루프를 빠져나오게 한다.
+            break
+
+    # 프로그램 종료. 카메라 리소스를 해제하고, 모든 창을 닫습니다.
+    if cap.isOpened(): 
+        cap.release()
+    cv2.destroyAllWindows()
+    
+
+
 
 
 if __name__ == "__main__":
