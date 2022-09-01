@@ -105,8 +105,9 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
     return success
 
 
+
 def main():
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     cap.set(3, 480)
     cap.set(4, 640)
     pTime = 0
@@ -114,8 +115,14 @@ def main():
     image = cv2.imread("TREE-M.png")
     # Trackbar(image)
     Trackbar()
+    start_time = time.time()
+
     while True:
         _, img = cap.read()
+        w, h, _ = img.shape
+        if w != 480:
+            img = cv2.resize(img, (640, 480))
+
         img = detector.findPose(img)
         lmlist = detector.findPosition(img)
         # print(lmlist)
@@ -160,19 +167,29 @@ def main():
             if process_angle(img, y, lmlist[13], lmlist[15], lmlist[19], 240): seccess += 1
             y += dy
             if process_angle(img, y, lmlist[12], lmlist[14], lmlist[16], 45): seccess += 1
-            def ten():
-                in_sec = 10
-                sec = int(in_sec)
-                print(sec)
 
-                # while은 반복문으로 sec가 0이 되면 반복을 멈춰라
-                while (sec != 0):
-                    sec = sec - 1
-                    time.sleep(1)
-                    cv2.putText(img, str(int(sec)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
-            if seccess == 12:
-                ten()
+            # def ten(img):
+            #     in_sec = 10
+            #     sec = int(in_sec)
+            #     print(sec)
 
+            #     # while은 반복문으로 sec가 0이 되면 반복을 멈춰라
+            #     while (sec != 0):
+            #         sec = sec - 1
+            #         time.sleep(1)
+            #         cv2.putText(img, str(int(sec)), (300, 50), cv2.FONT_HERSHEY_PLAIN, 3, (205, 30, 140), 3)
+
+            now_time = time.time()
+            #if seccess == 12:
+            if seccess > 4:
+                interval = now_time - start_time
+                cv2.putText(img, str(int(interval)), (70, 100), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 1)
+                if interval > 10.0: # 10초가 지났다
+                    print("10초동안 자세를 유지하셨습니다.")
+            else:
+                start_time = time.time() #성공하지 못하였으므로 시간을 지금시간으로 설정
+
+            
 
             # print(lmlist[11])
             # print(lmlist[12])
