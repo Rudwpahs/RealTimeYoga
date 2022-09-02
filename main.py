@@ -4,8 +4,20 @@ import time
 import math
 import numpy as np
 import time
-
+from gtts import gTTS
+import os
 ref_img = None  # 참고이미지
+
+global n
+n=1
+def tts(txt,n):
+   tts = gTTS(text=txt, lang='ko' ,slow=0)
+   tts.save('audio',n,'.mp3')
+
+   from playsound import playsound
+   playsound('audio',n,'.mp3')
+   n = n+1
+   return n
 
 
 def Trackbar():
@@ -106,7 +118,7 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
     return success
 
 
-def main():
+def main(n):
     cap = cv2.VideoCapture(0)
     cap.set(3, 480)
     cap.set(4, 640)
@@ -183,9 +195,9 @@ def main():
             # if seccess == 12:
             if seccess > 10:
                 interval = now_time - start_time
-                cv2.putText(img, str(int(interval)), (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 5, (0, 55, 25), 1)
+                cv2.putText(img, str(int(interval,'초')), (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
                 if interval > 10.0:  # 10초가 지났다
-                    print("10초동안 자세를 유지하셨습니다.")
+                    tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
             else:
                 start_time = time.time()  # 성공하지 못하였으므로 시간을 지금시간으로 설정
 
