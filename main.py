@@ -13,12 +13,12 @@ ref_img = None  # 참고이미지
 global n
 n = 1
 
-
 def tts(txt, n):
-    tts = gTTS(text=txt, lang='ko', slow=0)
-    tts.save('audio'+str(n)+'.mp3')
     audio_file = os.path.dirname(__file__) + '\\audio'+str(n)+'.mp3'
-    playsound(audio_file)
+    if not os.path.exists(audio_file): 
+        tts = gTTS(text=txt, lang='ko', slow=0)
+        tts.save(audio_file)
+    playsound('audio'+str(n)+'.mp3') # 이곳에 \\ 형식의 path를 넣으면 동작하지 않는듯 함
     n = n + 1
     return n
 
@@ -122,6 +122,9 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
 
 
 def main(n):
+
+    yoga_success = False # 자세유지가 성공하면 True로 변경됩니다.
+
     cap = cv2.VideoCapture(0)
     cap.set(3, 480)
     cap.set(4, 640)
@@ -202,7 +205,8 @@ def main(n):
 
                     cv2.putText(img, f'{int(interval)} 초', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
                 if interval > 10.0 and interval < 11.0:  # 10초가 지났다
-                    tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
+                    yoga_success = True
+                    #tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
                     cv2.putText(img, 'Great job', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
                     interval = 10.5
             else:
@@ -227,9 +231,15 @@ def main(n):
 
         cv2.imshow("Pose Estimation", np.hstack((img, ref_img)))
 
-        key = cv2.waitKey(27)
+        #key = cv2.waitKey(27)
+        key = cv2.waitKey(10)
         if key == 27:  # ESC를 누르면 무한루프를 빠져나오게 한다.
             break
+
+        if yoga_success:
+            yoga_success = False
+            tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
+            
 
     # 프로그램 종료. 카메라 리소스를 해제하고, 모든 창을 닫습니다.
     if cap.isOpened():
