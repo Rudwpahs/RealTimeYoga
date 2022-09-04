@@ -4,10 +4,10 @@ import time
 import math
 import numpy as np
 import time
-#from gtts import gTTS
+# from gtts import gTTS
 from playsound import playsound
 import os
-import simpleaudio as sa
+# import simpleaudio as sa
 
 ref_img = None  # 참고이미지
 
@@ -15,21 +15,19 @@ global n
 n = 1
 
 
-#def tts(txt, n):
-    #audio_file = os.path.dirname(__file__) + '\\audio'+str(n)+'.mp3'
-    #if not os.path.exists(audio_file): 
-    #    tts = gTTS(text=txt, lang='ko', slow=0)
-    #    tts.save(audio_file)
-    #playsound('audio'+str(n)+'.mp3') # 이곳에 \\ 형식의 path를 넣으면 동작하지 않는듯 함
-    #playsound('./audio1.mp3')
-    #n = n + 1
-    #return n
+# def tts(txt, n):
+# audio_file = os.path.dirname(__file__) + '\\audio'+str(n)+'.mp3'
+# if not os.path.exists(audio_file):
+#    tts = gTTS(text=txt, lang='ko', slow=0)
+#    tts.save(audio_file)
+# playsound('audio'+str(n)+'.mp3') # 이곳에 \\ 형식의 path를 넣으면 동작하지 않는듯 함
+# playsound('./audio1.mp3')
+# n = n + 1
+# return n
 
 def playsound_success():
-    #playsound('./audio1.mp3')
-    wave_obj = sa.WaveObject.from_wave_file("./audio1.wav")
-    play_obj = wave_obj.play()
-    play_obj.wait_done()
+    audio_file = os.path.dirname(__file__) + '\\audio1' + '.wav'
+    playsound(audio_file)
 
 
 def Trackbar():
@@ -131,8 +129,7 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
 
 
 def main(n):
-
-    yoga_success = False # 자세유지가 성공하면 True로 변경됩니다.
+    yoga_success = False  # 자세유지가 성공하면 True로 변경됩니다.
 
     cap = cv2.VideoCapture(0)
     cap.set(3, 480)
@@ -211,11 +208,10 @@ def main(n):
             if seccess > 1:
                 interval = now_time - start_time
                 if 0 < interval <= 10:
-
                     cv2.putText(img, f'{int(interval)} 초', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
                 if interval > 10.0 and interval < 11.0:  # 10초가 지났다
                     yoga_success = True
-                    #tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
+                    # tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
                     cv2.putText(img, 'Great job', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
                     interval = 10.5
             else:
@@ -240,18 +236,17 @@ def main(n):
 
         cv2.imshow("Pose Estimation", np.hstack((img, ref_img)))
 
-        #key = cv2.waitKey(27)
+        # key = cv2.waitKey(27)
         key = cv2.waitKey(10)
         if key == 27:  # ESC를 누르면 무한루프를 빠져나오게 한다.
             break
 
         if yoga_success:
             yoga_success = False
-            #os.system("open -n audio1.mp3")
+            # os.system("open -n audio1.mp3")
             playsound_success()
-            
-            #tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
-            
+
+            # tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
 
     # 프로그램 종료. 카메라 리소스를 해제하고, 모든 창을 닫습니다.
     if cap.isOpened():
@@ -260,5 +255,4 @@ def main(n):
 
 
 if __name__ == "__main__":
-    
     main(n)
