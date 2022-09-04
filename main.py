@@ -26,10 +26,13 @@ n = 1
     #return n
 
 def playsound_success():
+    audio_file = os.path.dirname(__file__) + '\\audio1.mp3'
+    playsound(audio_file)
     #playsound('./audio1.mp3')
-    wave_obj = sa.WaveObject.from_wave_file("./audio1.wav")
-    play_obj = wave_obj.play()
-    play_obj.wait_done()
+    # wave_obj = sa.WaveObject.from_wave_file("./audio1.wav")
+    # play_obj = wave_obj.play()
+    # play_obj.wait_done()
+    
 
 
 def Trackbar():
