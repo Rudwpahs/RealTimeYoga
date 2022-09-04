@@ -7,6 +7,7 @@ import time
 #from gtts import gTTS
 from playsound import playsound
 import os
+import simpleaudio as sa
 
 ref_img = None  # 참고이미지
 
@@ -25,7 +26,10 @@ n = 1
     #return n
 
 def playsound_success():
-    playsound('./audio1.mp3')
+    #playsound('./audio1.mp3')
+    wave_obj = sa.WaveObject.from_wave_file("./audio1.wav")
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
 
 
 def Trackbar():
@@ -243,8 +247,9 @@ def main(n):
 
         if yoga_success:
             yoga_success = False
+            #os.system("open -n audio1.mp3")
             playsound_success()
-
+            
             #tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
             
 
@@ -255,4 +260,5 @@ def main(n):
 
 
 if __name__ == "__main__":
+    
     main(n)
