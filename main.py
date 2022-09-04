@@ -4,7 +4,7 @@ import time
 import math
 import numpy as np
 import time
-from gtts import gTTS
+#from gtts import gTTS
 from playsound import playsound
 import os
 
@@ -13,14 +13,19 @@ ref_img = None  # 참고이미지
 global n
 n = 1
 
-def tts(txt, n):
-    audio_file = os.path.dirname(__file__) + '\\audio'+str(n)+'.mp3'
-    if not os.path.exists(audio_file): 
-        tts = gTTS(text=txt, lang='ko', slow=0)
-        tts.save(audio_file)
-    playsound('audio'+str(n)+'.mp3') # 이곳에 \\ 형식의 path를 넣으면 동작하지 않는듯 함
-    n = n + 1
-    return n
+
+#def tts(txt, n):
+    #audio_file = os.path.dirname(__file__) + '\\audio'+str(n)+'.mp3'
+    #if not os.path.exists(audio_file): 
+    #    tts = gTTS(text=txt, lang='ko', slow=0)
+    #    tts.save(audio_file)
+    #playsound('audio'+str(n)+'.mp3') # 이곳에 \\ 형식의 path를 넣으면 동작하지 않는듯 함
+    #playsound('./audio1.mp3')
+    #n = n + 1
+    #return n
+
+def playsound_success():
+    playsound('./audio1.mp3')
 
 
 def Trackbar():
@@ -238,7 +243,9 @@ def main(n):
 
         if yoga_success:
             yoga_success = False
-            tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
+            playsound_success()
+
+            #tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
             
 
     # 프로그램 종료. 카메라 리소스를 해제하고, 모든 창을 닫습니다.
