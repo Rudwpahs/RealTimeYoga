@@ -7,6 +7,7 @@ import time
 # from gtts import gTTS
 from playsound import playsound
 import os
+import emoji
 # import simpleaudio as sa
 
 ref_img = None  # 참고이미지
@@ -208,11 +209,11 @@ def main(n):
             if seccess > 1:
                 interval = now_time - start_time
                 if 0 < interval <= 10:
-                    cv2.putText(img, f'{int(interval)} 초', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
+                    cv2.putText(img, f'Time:{int(interval)}s', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 55, 25), 3)
                 if interval > 10.0 and interval < 11.0:  # 10초가 지났다
                     yoga_success = True
                     # tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
-                    cv2.putText(img, 'Great job', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 3, (0, 55, 25), 3)
+                    cv2.putText(img, 'Great Job!', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 55, 25), 3)
                     interval = 10.5
             else:
                 start_time = time.time()  # 성공하지 못하였으므로 시간을 지금시간으로 설정
@@ -244,7 +245,7 @@ def main(n):
         if yoga_success:
             yoga_success = False
             # os.system("open -n audio1.mp3")
-            playsound_success()
+            # playsound_success()
 
             # tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
 
