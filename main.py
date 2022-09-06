@@ -206,7 +206,7 @@ def main(n):
 
             now_time = time.time()
             # if seccess == 12:
-            if seccess > 1:
+            if seccess > 10:
                 interval = now_time - start_time
                 if 0 < interval <= 10:
                     cv2.putText(img, f'Time:{int(interval)}s', (70, 100), cv2.FONT_HERSHEY_TRIPLEX, 1, (0, 55, 25), 3)
