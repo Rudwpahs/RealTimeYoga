@@ -1,19 +1,19 @@
 # RealTimeYoga
 
-이프로그램은 mediapipe를 이용하여 요가자세의 정확성을 알려줍니다.
-COVID시대에 운동부족인 사람들이 활용하면 좋겠습니다.
+This program uses mediapipe to inform you of the accuracy of yoga postures.
+I hope that people who lack exercise in the COVID era can use it.
 
 ![Image 20220906 101019](https://user-images.githubusercontent.com/296403/188530081-c2b957d2-734c-46d9-b615-eca190976835.png)
 
-# 필요사항
+# Requirements
 
-- python 3.9
-- 웹캠
+- python 3.9+
+- webcam
 
-# 사용법
+# How to use
 
-- 프로그램을 실행하고
-- 카메라 앞에서 화면을보고
-- 오른쪽의 요가자세를 따라하세요
-- 각 부분의 자세가 틀리면 붉은색 동그라미가 나옵니다. 파란색이 되도록 자세를 수정하세요
-- 자세를 10초간 유지하면 성공입니다.
+- Run the program.
+- Watch the display in front of the webcam.
+- Follow the posture that shows at the display.
+- If the posture of each part is incorrect, a red circle will appear. Adjust your posture so that it becomes blue.
+- If you maintain the posture for 10 seconds, you are successful.
