@@ -26,16 +26,21 @@ jobs:
         run: echo "VERSION=${env:GITHUB_REF_NAME}" >> $env:GITHUB_ENV
 
       - name: Install build dependencies
+        shell: pwsh
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install pyinstaller
+          choco install innosetup --no-progress -y
 
       - name: Build release package
         run: python scripts/make_release_package.py "${{ env.VERSION }}"
 
       - name: Build Windows EXE package
         run: python scripts/build_windows_exe.py "${{ env.VERSION }}"
+
+      - name: Build Windows installer
+        run: python scripts/build_windows_installer.py "${{ env.VERSION }}"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2
@@ -49,6 +54,7 @@ jobs:
             - Image demo mode for computers without a webcam
             - Source package with the app, model, assets, and requirements
             - Windows EXE package for running without a Python setup
+            - Windows installer for Start Menu/Desktop installation
 
             Run with a webcam:
             ```powershell
@@ -62,3 +68,4 @@ jobs:
           files: |
             dist/RealTimeYoga-${{ env.VERSION }}.zip
             dist/RealTimeYoga-Windows-${{ env.VERSION }}.zip
+            dist/RealTimeYoga-Setup-${{ env.VERSION }}.exe

@@ -22,6 +22,12 @@ I hope that people who lack exercise in the COVID era can use it.
 - Run `RealTimeYoga.exe`.
 - Without a webcam, run `RealTimeYoga.exe --image easy.png` from PowerShell.
 
+# Windows Installer
+
+- Download `RealTimeYoga-Setup-*.exe` from [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases).
+- Run the installer.
+- Launch RealTimeYoga from the Start Menu or desktop shortcut.
+
 # How to use
 
 - Run the program.
