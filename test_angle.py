@@ -3,6 +3,7 @@ import mediapipe as mp
 import time
 import math
 import numpy as np
+from pose_compat import poseDetector
 
 ref_img = None # 참고이미지
 
@@ -31,7 +32,7 @@ def Trackbar():
     cv2.imshow("Pose Estimation", ref_img)
 
 
-class poseDetector():
+class legacy_poseDetector():
     def __init__(self, mode=False, complexity=1, landmarks=True, enable_seg=False,
                  smooth_seg=True, det_conf=0.5, track_conf=0.5):
         self.mode = mode

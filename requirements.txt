@@ -1,0 +1,6 @@
+mediapipe>=0.10.30
+opencv-contrib-python
+numpy
+playsound==1.2.2
+emoji
+gTTS

@@ -8,6 +8,8 @@ import time
 from playsound import playsound
 import os
 import emoji
+import argparse
+from pose_compat import poseDetector
 # import simpleaudio as sa
 
 ref_img = None  # 참고이미지
@@ -56,7 +58,7 @@ def Trackbar():
     cv2.imshow("Pose Estimation", ref_img)
 
 
-class poseDetector():
+class legacy_poseDetector():
     def __init__(self, mode=False, complexity=1, landmarks=True, enable_seg=False,
                  smooth_seg=True, det_conf=0.5, track_conf=0.5):
         self.mode = mode
@@ -129,12 +131,25 @@ def process_angle(img, yy, lm1, lm2, lm3, ref_angle):
     return success
 
 
-def main(n):
+def main(n, source_image=None):
     yoga_success = False  # 자세유지가 성공하면 True로 변경됩니다.
 
-    cap = cv2.VideoCapture(0)
-    cap.set(3, 480)
-    cap.set(4, 640)
+    cap = None
+    demo_img = None
+    if source_image:
+        demo_img = cv2.imread(source_image)
+        if demo_img is None:
+            raise FileNotFoundError(f"Could not read source image: {source_image}")
+        print(f"Using image source: {source_image}")
+    else:
+        cap = cv2.VideoCapture(0)
+        cap.set(3, 480)
+        cap.set(4, 640)
+        if not cap.isOpened():
+            demo_img = cv2.imread("easy.png")
+            if demo_img is None:
+                raise RuntimeError("No webcam found and easy.png could not be loaded.")
+            print("No webcam found; using easy.png demo source.")
     pTime = 0
     detector = poseDetector()
     image = cv2.imread("TREE-M.png")
@@ -143,7 +158,13 @@ def main(n):
     start_time = time.time()
 
     while True:
-        _, img = cap.read()
+        if demo_img is not None:
+            img = demo_img.copy()
+        else:
+            ok, img = cap.read()
+            if not ok or img is None:
+                print("Camera frame unavailable; exiting.")
+                break
         w, h, _ = img.shape
         if w != 480:
             img = cv2.resize(img, (640, 480))
@@ -250,10 +271,14 @@ def main(n):
             # tts("잘하셨어요! 10초동안 자세를 유지하셨어요", n)
 
     # 프로그램 종료. 카메라 리소스를 해제하고, 모든 창을 닫습니다.
-    if cap.isOpened():
+    detector.close()
+    if cap is not None and cap.isOpened():
         cap.release()
     cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
-    main(n)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--image", help="Use an image as the input source instead of a webcam.")
+    args = parser.parse_args()
+    main(n, args.image)
