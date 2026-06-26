@@ -28,6 +28,12 @@ I hope that people who lack exercise in the COVID era can use it.
 - Run the installer.
 - Launch RealTimeYoga from the Start Menu or desktop shortcut.
 
+# Web App
+
+- Open the browser version at https://rudwpahs.github.io/RealTimeYoga/.
+- Camera mode requires HTTPS or localhost browser access.
+- Use `Demo image` when a webcam is not available.
+
 # How to use
 
 - Run the program.

@@ -36,6 +36,9 @@ jobs:
       - name: Build release package
         run: python scripts/make_release_package.py "${{ env.VERSION }}"
 
+      - name: Build web package
+        run: python scripts/build_web.py "${{ env.VERSION }}"
+
       - name: Build Windows EXE package
         run: python scripts/build_windows_exe.py "${{ env.VERSION }}"
 
@@ -53,6 +56,7 @@ jobs:
             - MediaPipe compatibility for the current Python package line
             - Image demo mode for computers without a webcam
             - Source package with the app, model, assets, and requirements
+            - Browser web app package
             - Windows EXE package for running without a Python setup
             - Windows installer for Start Menu/Desktop installation
 
@@ -67,5 +71,6 @@ jobs:
             ```
           files: |
             dist/RealTimeYoga-${{ env.VERSION }}.zip
+            dist/RealTimeYoga-Web-${{ env.VERSION }}.zip
             dist/RealTimeYoga-Windows-${{ env.VERSION }}.zip
             dist/RealTimeYoga-Setup-${{ env.VERSION }}.exe
