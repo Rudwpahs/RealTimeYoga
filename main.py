@@ -9,6 +9,7 @@ from playsound import playsound
 import os
 import emoji
 import argparse
+from app_paths import read_image, resource_path
 from pose_compat import poseDetector
 # import simpleaudio as sa
 
@@ -29,7 +30,7 @@ n = 1
 # return n
 
 def playsound_success():
-    audio_file = os.path.dirname(__file__) + '\\audio1' + '.wav'
+    audio_file = resource_path("audio1.wav")
     playsound(audio_file)
 
 
@@ -40,9 +41,9 @@ def Trackbar():
         global ref_img
         # print('position changed')
         if x == 1:
-            ref_img = cv2.imread("TREE-W.png")
+            ref_img = read_image("TREE-W.png")
         else:
-            ref_img = cv2.imread("TREE-M.png")
+            ref_img = read_image("TREE-M.png")
 
     # img = cv2.imread("TREE-M.png")
 
@@ -52,9 +53,9 @@ def Trackbar():
 
     WM = cv2.getTrackbarPos('Man or Woman', "Pose Estimation")
     if WM == 1:
-        ref_img = cv2.imread("TREE-W.png")
+        ref_img = read_image("TREE-W.png")
     else:
-        ref_img = cv2.imread("TREE-M.png")
+        ref_img = read_image("TREE-M.png")
     cv2.imshow("Pose Estimation", ref_img)
 
 
@@ -137,7 +138,7 @@ def main(n, source_image=None):
     cap = None
     demo_img = None
     if source_image:
-        demo_img = cv2.imread(source_image)
+        demo_img = read_image(source_image)
         if demo_img is None:
             raise FileNotFoundError(f"Could not read source image: {source_image}")
         print(f"Using image source: {source_image}")
@@ -146,13 +147,13 @@ def main(n, source_image=None):
         cap.set(3, 480)
         cap.set(4, 640)
         if not cap.isOpened():
-            demo_img = cv2.imread("easy.png")
+            demo_img = read_image("easy.png")
             if demo_img is None:
                 raise RuntimeError("No webcam found and easy.png could not be loaded.")
             print("No webcam found; using easy.png demo source.")
     pTime = 0
     detector = poseDetector()
-    image = cv2.imread("TREE-M.png")
+    image = read_image("TREE-M.png")
     # Trackbar(image)
     Trackbar()
     start_time = time.time()

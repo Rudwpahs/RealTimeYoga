@@ -6,8 +6,9 @@ import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
+from app_paths import resource_path
 
-MODEL_PATH = Path(__file__).with_name("pose_landmarker_lite.task")
+MODEL_PATH = Path(resource_path("pose_landmarker_lite.task"))
 
 
 class poseDetector:

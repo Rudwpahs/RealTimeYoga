@@ -15,6 +15,13 @@ I hope that people who lack exercise in the COVID era can use it.
 - Download packaged builds from the [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases) page.
 - Install dependencies with `pip install -r requirements.txt`.
 
+# Windows EXE
+
+- Download `RealTimeYoga-Windows-*.zip` from [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases).
+- Extract the zip file.
+- Run `RealTimeYoga.exe`.
+- Without a webcam, run `RealTimeYoga.exe --image easy.png` from PowerShell.
+
 # How to use
 
 - Run the program.

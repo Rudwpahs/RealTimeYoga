@@ -3,3 +3,5 @@ __pycache__/
 run_stdout.log
 run_stderr.log
 dist/
+build/
+*.spec

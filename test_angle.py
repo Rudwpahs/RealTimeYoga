@@ -3,6 +3,7 @@ import mediapipe as mp
 import time
 import math
 import numpy as np
+from app_paths import read_image
 from pose_compat import poseDetector
 
 ref_img = None # 참고이미지
@@ -14,9 +15,9 @@ def Trackbar():
         global ref_img
         #print('position changed')
         if x == 1:
-          ref_img = cv2.imread("TREE-W.png")
+          ref_img = read_image("TREE-W.png")
         else:
-          ref_img = cv2.imread("TREE-M.png")
+          ref_img = read_image("TREE-M.png")
 
     #img = cv2.imread("TREE-M.png")
 
@@ -26,9 +27,9 @@ def Trackbar():
 
     WM = cv2.getTrackbarPos('Man or Woman', "Pose Estimation")
     if WM == 1:
-        ref_img = cv2.imread("TREE-W.png")
+        ref_img = read_image("TREE-W.png")
     else:
-        ref_img = cv2.imread("TREE-M.png")
+        ref_img = read_image("TREE-M.png")
     cv2.imshow("Pose Estimation", ref_img)
 
 
