@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set version
+        shell: bash
+        run: echo "VERSION=${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+
+      - name: Build release package
+        run: python scripts/make_release_package.py "${{ env.VERSION }}"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: RealTimeYoga ${{ env.VERSION }}
+          body: |
+            RealTimeYoga ${{ env.VERSION }}
+
+            Includes:
+            - MediaPipe compatibility for the current Python package line
+            - Image demo mode for computers without a webcam
+            - Release zip with the app, model, assets, and requirements
+
+            Run with a webcam:
+            ```powershell
+            python main.py
+            ```
+
+            Run without a webcam:
+            ```powershell
+            python main.py --image easy.png
+            ```
+          files: dist/RealTimeYoga-${{ env.VERSION }}.zip

@@ -10,6 +10,11 @@ I hope that people who lack exercise in the COVID era can use it.
 - python 3.9+
 - webcam
 
+# Download
+
+- Download packaged builds from the [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases) page.
+- Install dependencies with `pip install -r requirements.txt`.
+
 # How to use
 
 - Run the program.
@@ -17,3 +22,4 @@ I hope that people who lack exercise in the COVID era can use it.
 - Follow the posture that shows at the display.
 - If the posture of each part is incorrect, a red circle will appear. Adjust your posture so that it becomes blue.
 - If you maintain the posture for 10 seconds, you are successful.
+- Without a webcam, run `python main.py --image easy.png` to test with the demo image.
