@@ -1,0 +1,24 @@
+name: Python quality
+
+on:
+  push:
+    branches:
+      - main
+      - 'chore/**'
+      - 'fix/**'
+  pull_request:
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+      - name: Compile source
+        run: python -m compileall -q main.py pose_compat.py app_paths.py scripts
+      - name: Import smoke test
+        run: python -c "import app_paths, pose_compat, main"
