@@ -1,38 +1,73 @@
-# RealTimeYoga
+<div align="center">
 
-웹캠이나 이미지에서 사람의 자세를 읽고, 기준 요가 자세와 얼마나 비슷한지 관절 각도로 알려주는 실시간 피드백 프로젝트입니다. 예전 설명은 코로나 시기의 운동 부족에 초점이 있었지만, 지금은 **MediaPipe 기반 자세 인식 실험**이라는 점이 더 정확합니다.
+# 🧘 RealTimeYoga
 
-## 어떻게 동작하나
+### Real-time pose feedback with MediaPipe.
+
+웹캠이나 이미지에서 사람의 자세를 읽고 **관절 각도 차이로 기준 요가 자세와 비교**하는 computer-vision experiment입니다.
+
+<p>
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.9+-3776AB?logo=python&logoColor=white">
+  <img alt="MediaPipe" src="https://img.shields.io/badge/MediaPipe-Pose-00A67E?logo=google&logoColor=white">
+  <img alt="OpenCV" src="https://img.shields.io/badge/OpenCV-Vision-5C3EE8?logo=opencv&logoColor=white">
+  <img alt="Status" src="https://img.shields.io/badge/status-computer_vision_experiment-6f42c1">
+</p>
+
+### [▶ Browser Demo](https://rudwpahs.github.io/RealTimeYoga/)
+
+[How it works](#how-it-works) · [Algorithm](#angle-matching) · [Run](#run) · [Limits](#scope--limits)
+
+</div>
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Webcam / Image] --> B[MediaPipe Pose]
+    B --> C[Joint landmarks]
+    C --> D[Joint angles]
+    D --> E[Compare with reference]
+    E --> F{Enough joints match?}
+    F -->|No| G[Live visual feedback]
+    F -->|Yes for 10s| H[Pose success]
+```
+
+현재 판정 흐름은 다음과 같습니다.
 
 1. 웹캠 프레임 또는 입력 이미지를 읽습니다.
-2. MediaPipe Pose로 사람의 관절 landmark를 찾습니다.
-3. 세 관절 좌표를 이용해 각 관절의 각도를 계산합니다.
-4. 미리 정한 기준 각도와 현재 각도의 차이를 구합니다.
-5. 차이가 20°보다 작으면 해당 관절을 성공으로 봅니다.
-6. 기준을 만족하는 관절이 10개를 넘는 상태가 10초 이상 유지되면 자세 성공으로 처리합니다.
+2. MediaPipe Pose로 관절 landmark를 찾습니다.
+3. 세 관절 좌표로 각도를 계산합니다.
+4. 기준 각도와 현재 각도의 차이를 구합니다.
+5. 차이가 `20°`보다 작으면 해당 관절을 성공으로 봅니다.
+6. 기준을 만족하는 관절이 **10개를 넘는 상태가 10초 이상 유지**되면 자세 성공으로 처리합니다.
 
-각도 계산은 두 벡터의 방향을 `atan2`로 구한 뒤 차이를 도 단위로 바꾸는 방식입니다.
+## Angle matching
 
-```text
-세 관절 A-B-C
-   ↓
-B→C 방향각 - B→A 방향각
-   ↓
-0~360° 범위로 정규화
-   ↓
-기준 각도와의 최소 차이 계산
-   ↓
-차이 < 20° 이면 해당 관절 통과
+세 관절 `A-B-C`에서 B를 중심으로 두 방향을 비교합니다.
+
+```mermaid
+flowchart LR
+    A[Joint A-B-C] --> B[Direction B→C]
+    A --> C[Direction B→A]
+    B --> D[atan2 angle difference]
+    C --> D
+    D --> E[Normalize 0–360°]
+    E --> F[Minimum difference vs reference]
+    F --> G{Difference < 20°?}
+    G -->|Yes| H[Joint pass]
+    G -->|No| I[Joint needs correction]
 ```
 
 화면에서는 맞는 관절은 파란색, 기준에서 많이 벗어난 관절은 빨간색으로 표시합니다.
 
-## 실행
+## Run
 
-요구 사항:
+Requirements:
 
 - Python 3.9+
-- 웹캠 또는 테스트 이미지
+- Webcam or test image
 
 ```bash
 pip install -r requirements.txt
@@ -45,20 +80,22 @@ python main.py
 python main.py --image easy.png
 ```
 
-웹캠이 없으면 기본 데모 이미지로 자동 전환하는 경로도 들어 있습니다.
+웹캠이 없으면 기본 demo image로 자동 전환하는 경로도 들어 있습니다.
 
-## 배포 형태
+## Deployment forms
 
-- Python 원본 실행
-- Windows 패키지 / 설치 파일
-- 브라우저 버전: `https://rudwpahs.github.io/RealTimeYoga/`
+| Target | Available form |
+|---|---|
+| Python | Original app |
+| Windows | Package / installer |
+| Browser | GitHub Pages demo |
 
-## 기술
+## Stack
 
-- Python
-- OpenCV
-- MediaPipe Pose
-- NumPy
-- 관절 각도 기반 규칙 판정
+`Python` · `OpenCV` · `MediaPipe Pose` · `NumPy` · joint-angle rule matching
 
-이 프로젝트의 결과는 운동 자세를 도와주는 피드백이며 의료 진단이나 전문적인 생체역학 측정으로 사용하지 않습니다.
+## Scope & limits
+
+> 이 프로젝트는 **MediaPipe 기반 자세 인식 실험**입니다.
+
+결과는 운동 자세를 도와주는 피드백이며 의료 진단, 재활 판단, 전문적인 생체역학 측정으로 사용하지 않습니다.
