@@ -1,44 +1,64 @@
 # RealTimeYoga
 
-This program uses mediapipe to inform you of the accuracy of yoga postures.
-I hope that people who lack exercise in the COVID era can use it.
+웹캠이나 이미지에서 사람의 자세를 읽고, 기준 요가 자세와 얼마나 비슷한지 관절 각도로 알려주는 실시간 피드백 프로젝트입니다. 예전 설명은 코로나 시기의 운동 부족에 초점이 있었지만, 지금은 **MediaPipe 기반 자세 인식 실험**이라는 점이 더 정확합니다.
 
-![Image 20220906 101019](https://user-images.githubusercontent.com/296403/188530081-c2b957d2-734c-46d9-b615-eca190976835.png)
+## 어떻게 동작하나
 
-# Requirements
+1. 웹캠 프레임 또는 입력 이미지를 읽습니다.
+2. MediaPipe Pose로 사람의 관절 landmark를 찾습니다.
+3. 세 관절 좌표를 이용해 각 관절의 각도를 계산합니다.
+4. 미리 정한 기준 각도와 현재 각도의 차이를 구합니다.
+5. 차이가 20°보다 작으면 해당 관절을 성공으로 봅니다.
+6. 기준을 만족하는 관절이 10개를 넘는 상태가 10초 이상 유지되면 자세 성공으로 처리합니다.
 
-- python 3.9+
-- webcam
+각도 계산은 두 벡터의 방향을 `atan2`로 구한 뒤 차이를 도 단위로 바꾸는 방식입니다.
 
-# Download
+```text
+세 관절 A-B-C
+   ↓
+B→C 방향각 - B→A 방향각
+   ↓
+0~360° 범위로 정규화
+   ↓
+기준 각도와의 최소 차이 계산
+   ↓
+차이 < 20° 이면 해당 관절 통과
+```
 
-- Download packaged builds from the [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases) page.
-- Install dependencies with `pip install -r requirements.txt`.
+화면에서는 맞는 관절은 파란색, 기준에서 많이 벗어난 관절은 빨간색으로 표시합니다.
 
-# Windows EXE
+## 실행
 
-- Download `RealTimeYoga-Windows-*.zip` from [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases).
-- Extract the zip file.
-- Run `RealTimeYoga.exe`.
-- Without a webcam, run `RealTimeYoga.exe --image easy.png` from PowerShell.
+요구 사항:
 
-# Windows Installer
+- Python 3.9+
+- 웹캠 또는 테스트 이미지
 
-- Download `RealTimeYoga-Setup-*.exe` from [Releases](https://github.com/Rudwpahs/RealTimeYoga/releases).
-- Run the installer.
-- Launch RealTimeYoga from the Start Menu or desktop shortcut.
+```bash
+pip install -r requirements.txt
+python main.py
+```
 
-# Web App
+웹캠 없이 이미지로 확인하려면:
 
-- Open the browser version at https://rudwpahs.github.io/RealTimeYoga/.
-- Camera mode requires HTTPS or localhost browser access.
-- Use `Demo image` when a webcam is not available.
+```bash
+python main.py --image easy.png
+```
 
-# How to use
+웹캠이 없으면 기본 데모 이미지로 자동 전환하는 경로도 들어 있습니다.
 
-- Run the program.
-- Watch the display in front of the webcam.
-- Follow the posture that shows at the display.
-- If the posture of each part is incorrect, a red circle will appear. Adjust your posture so that it becomes blue.
-- If you maintain the posture for 10 seconds, you are successful.
-- Without a webcam, run `python main.py --image easy.png` to test with the demo image.
+## 배포 형태
+
+- Python 원본 실행
+- Windows 패키지 / 설치 파일
+- 브라우저 버전: `https://rudwpahs.github.io/RealTimeYoga/`
+
+## 기술
+
+- Python
+- OpenCV
+- MediaPipe Pose
+- NumPy
+- 관절 각도 기반 규칙 판정
+
+이 프로젝트의 결과는 운동 자세를 도와주는 피드백이며 의료 진단이나 전문적인 생체역학 측정으로 사용하지 않습니다.
