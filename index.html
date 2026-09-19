@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RealTimeYoga</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="workbench" aria-label="Pose estimation workspace">
+        <header class="topbar">
+          <div>
+            <h1>RealTimeYoga</h1>
+            <p id="statusText">Loading pose model...</p>
+          </div>
+          <div class="timer" aria-label="Hold timer">
+            <span id="holdSeconds">0</span>
+            <span>s</span>
+          </div>
+        </header>
+
+        <div class="stage-grid">
+          <div class="stage">
+            <video id="video" playsinline muted></video>
+            <canvas id="output" width="640" height="480"></canvas>
+          </div>
+          <aside class="reference" aria-label="Reference pose">
+            <img id="referenceImage" src="./assets/TREE-M.png" alt="Tree pose reference">
+            <div class="score">
+              <strong id="scoreText">0/12</strong>
+              <span id="resultText">No pose yet</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Controls">
+        <div class="button-row">
+          <button id="cameraButton" type="button">Start camera</button>
+          <button id="demoButton" type="button">Demo image</button>
+          <button id="stopButton" type="button">Stop</button>
+        </div>
+
+        <div class="field-row">
+          <label for="referenceSelect">Reference</label>
+          <select id="referenceSelect">
+            <option value="TREE-M.png">Man</option>
+            <option value="TREE-W.png">Woman</option>
+          </select>
+        </div>
+
+        <div class="field-row">
+          <label for="thresholdRange">Angle tolerance</label>
+          <input id="thresholdRange" type="range" min="10" max="40" value="20">
+          <output id="thresholdValue" for="thresholdRange">20 deg</output>
+        </div>
+
+        <div class="check-list" id="checkList" aria-label="Pose checks"></div>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
